@@ -1,0 +1,61 @@
+{
+  "name": "@trel-to/sdk",
+  "version": "0.3.0",
+  "description": "Trel SDK for Node.js - OpenTelemetry-based observability for trel.to",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waytodev/trel.git"
+  },
+  "keywords": [
+    "trel",
+    "observability",
+    "opentelemetry",
+    "otel",
+    "tracing",
+    "otlp"
+  ],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "prepublishOnly": "pnpm run build"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.45.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.52.1",
+    "@opentelemetry/resources": "^1.27.0",
+    "@opentelemetry/sdk-node": "^0.52.1",
+    "@opentelemetry/semantic-conventions": "^1.27.0"
+  },
+  "peerDependencies": {
+    "@opentelemetry/instrumentation-express": "*"
+  },
+  "peerDependenciesMeta": {
+    "@opentelemetry/instrumentation-express": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@opentelemetry/instrumentation-express": "^0.36.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.3.3"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
