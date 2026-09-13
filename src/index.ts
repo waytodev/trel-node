@@ -4,7 +4,7 @@
  *
  * Usage:
  *   import { init } from '@trel-to/sdk';
- *   init({ apiKey: 'trel_sk_xxx', service: 'my-api' });
+ *   init({ apiKey: 'trel_sk_xxx', service: 'my-api', environment: 'qa' });
  */
 
 import { NodeSDK } from "@opentelemetry/sdk-node";
@@ -18,6 +18,7 @@ const DEFAULT_ENDPOINT = "https://ingest.trel.to";
 export interface TrelOptions {
   apiKey: string;
   service?: string;
+  environment?: string;
   endpoint?: string;
 }
 
@@ -26,21 +27,32 @@ let initialized = false;
 export function init(options: TrelOptions): void {
   if (initialized) return;
 
-  const { apiKey, service = "unknown", endpoint = DEFAULT_ENDPOINT } = options;
+  const {
+    apiKey,
+    service = "unknown",
+    environment,
+    endpoint = DEFAULT_ENDPOINT,
+  } = options;
+
+  const headers: Record<string, string> = {
+    "x-trel-key": apiKey,
+    "Content-Type": "application/json",
+  };
+  if (environment) headers["x-trel-environment"] = environment;
 
   const traceExporter = new OTLPTraceExporter({
     url: `${endpoint}/v1/traces`,
-    headers: {
-      "x-trel-key": apiKey,
-      "Content-Type": "application/json",
-    },
+    headers,
   });
+
+  const resourceAttrs: Record<string, string> = {
+    [ATTR_SERVICE_NAME]: service,
+  };
+  if (environment) resourceAttrs["deployment.environment"] = environment;
 
   const sdk = new NodeSDK({
     traceExporter,
-    resource: new Resource({
-      [ATTR_SERVICE_NAME]: service,
-    }),
+    resource: new Resource(resourceAttrs),
     instrumentations: [
       getNodeAutoInstrumentations({
         "@opentelemetry/instrumentation-fs": { enabled: false },
