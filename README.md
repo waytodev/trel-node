@@ -29,7 +29,12 @@ Call `init()` before any other imports. After this, HTTP requests (Express, Fast
 | --------- | -------- | -------------------- | -------------------------------- |
 | `apiKey`  | Yes      | —                    | Your Trel API key                |
 | `service` | No       | `'unknown'`          | Service name for your app        |
+| `environment` | No   | `'production'`       | Deployment environment (`qa`, `staging`, …) |
+| `release` | No       | —                    | Release tag (git sha / semver); enables release health + source maps |
+| `logs.console` | No  | `true`               | Forward `console.*` as logs with trace ids attached |
 | `endpoint`| No       | `https://ingest.trel.to` | Custom ingestion URL         |
+
+Also exported: `captureException(err, context?)` records an error on the active span, and `getTraceContext()` returns `{ traceId, spanId }` for manual log correlation.
 
 ## License
 
