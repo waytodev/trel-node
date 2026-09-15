@@ -5,7 +5,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/waytodev/trel.git"
+    "url": "https://github.com/waytodev/trel-node.git"
+  },
+  "homepage": "https://docs.trel.to/node",
+  "bugs": {
+    "url": "https://github.com/waytodev/trel-node/issues"
   },
   "keywords": [
     "trel",
